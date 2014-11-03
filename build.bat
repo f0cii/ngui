@@ -18,4 +18,8 @@ IF "%1"=="noconsole" (
     rem @if %ERRORLEVEL% neq 0 goto end
 )
 
+cd Release
+ngui.exe
+cd ..
+
 pause

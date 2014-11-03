@@ -57,9 +57,10 @@ func main() {
 	url = "file://" + url + "/example.html"
 	//cef.CreateBrowser(unsafe.Pointer(hwnd), &browserSettings, url, true)
 	go func() {
-		browser := cef.CreateBrowser(unsafe.Pointer(hwnd), &browserSettings, url, false)
+		//browser := cef.CreateBrowser(unsafe.Pointer(hwnd), &browserSettings, url, false)
+		cef.CreateBrowser(unsafe.Pointer(hwnd), &browserSettings, url, false)
 		cef.WindowResized(unsafe.Pointer(hwnd))
-		browser.ExecuteJavaScript("console.log('we outchea');cef2go.callback('sup', 10, 10, true, 'something');", "sup.js", 1)
+		//browser.ExecuteJavaScript("console.log('we outchea');cef2go.callback('sup', 10, 10, true, 'something');", "sup.js", 1)
 	}()
 
 	// It should be enough to call WindowResized after 10ms,
