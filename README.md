@@ -7,7 +7,7 @@ How to build on Windows platform (Win7 32/64-bit).
 
 1. Make sure you have installed windows-386 version of Go (for example: 1.3.3)
 2. Install mingw and add C:\MinGW\bin to PATH. You can install mingw using mingw-get-setup.exe. Select packages to install: "mingw-developer-toolkit", "mingw32-base", "msys-base". CEF2go was tested and works fine with GCC 4.8.1. You can check gcc version with "gcc --version".
-3. Download CEF 3 branch 1750 revision 1590 binaries: [cef_binary_3.1750.1590_windows32.7z](https://github.com/CzarekTomczak/cef2go/releases/download/cef3-b1750-r1590/cef_binary_3.1750.1590_windows32.7z)
+3. Download CEF 3 branch 2171 revision 1897 binaries: [cef_binary_3.2171.1897_windows32.7z](https://github.com/nvsoft/release/cef_binary_3.2171.1897_windows32.7z)
    Copy Release/* to cef2go/Release
    Copy Resources/* to cef2go/Release
 4. install github.com/nvsoft/cef and github.com/nvsoft/wingui
