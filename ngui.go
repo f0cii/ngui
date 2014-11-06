@@ -10,7 +10,7 @@ import (
 	"log"
 	"os"
 	"syscall"
-	//"time"
+	"time"
 	"unsafe"
 	"github.com/nvsoft/wingui"
 	"fmt"
@@ -59,15 +59,15 @@ func main() {
 	go func() {
 		//browser := cef.CreateBrowser(unsafe.Pointer(hwnd), &browserSettings, url, false)
 		cef.CreateBrowser(unsafe.Pointer(hwnd), &browserSettings, url, false)
-		cef.WindowResized(unsafe.Pointer(hwnd))
+		//cef.WindowResized(unsafe.Pointer(hwnd))
 		//browser.ExecuteJavaScript("console.log('we outchea');cef2go.callback('sup', 10, 10, true, 'something');", "sup.js", 1)
 	}()
 
 	// It should be enough to call WindowResized after 10ms,
 	// though to be sure let's extend it to 100ms.
-	//time.AfterFunc(time.Millisecond*100, func() {
-	//		cef.WindowResized(unsafe.Pointer(hwnd))
-	//	})
+	time.AfterFunc(time.Millisecond*100, func() {
+		cef.WindowResized(unsafe.Pointer(hwnd))
+	})
 
 	cef.RunMessageLoop()
 	cef.Shutdown()
