@@ -15,9 +15,11 @@ How to build on Windows platform (Win7 32/64-bit).
    go get github.com/nvsoft/wingui
 5. Run [build.bat] in the directory
 6. Run ngui.exe in the "Release" directory
+7. Test By Xulei on 10-th, Nov. Windows 7, x86, working ok.
 
 
 Author email: 
 -------------------
-> 529808348@qq.com JianSu  China
-> xulei8@qq.com  Beijing China
+1. 529808348@qq.com JiangSu  China
+2. xulei8@qq.com  Beijing China
+
