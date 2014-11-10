@@ -21,7 +21,7 @@ How to build on Windows platform (Win7 32/64-bit).
 Windows 7: 
 -------------------
 
-![alt tag](http://i.imgur.com/lUrgE2Q.png)
+![alt tag](http://www.daqid.com/cef2go.jpg)
 
 Author email: 
 -------------------
