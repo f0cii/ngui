@@ -18,6 +18,11 @@ How to build on Windows platform (Win7 32/64-bit).
 7. Test By Xulei on 10-th, Nov. Windows 7, x86, working ok.
 
 
+Windows 7: 
+-------------------
+
+![alt tag](http://i.imgur.com/lUrgE2Q.png)
+
 Author email: 
 -------------------
 1. 529808348@qq.com JiangSu  China
