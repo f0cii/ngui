@@ -9,11 +9,11 @@ import (
 
 var printf = fmt.Println
 
-func registerV8Handlers() {
+func init() {
 	cef.RegisterV8Handler("move", v8_move)
 }
 
-func v8_move(browser *cef.Browser, args []cef.V8Value) {
+func v8_move(browser *cef.Browser, args []cef.V8Value) (result interface {}) {
 	fmt.Println("v8_move")
 	x := cef.V8ValueToInt32(args[0])
 	y := cef.V8ValueToInt32(args[1])
@@ -29,4 +29,7 @@ func v8_move(browser *cef.Browser, args []cef.V8Value) {
 	win.MoveWindow(h, x, y, width, height, false)
 	*/
 	//cef.WindowResized(unsafe.Pointer(hWnd))
+	result = 1
+
+	return
 }

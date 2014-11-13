@@ -44,12 +44,14 @@ More to come.
 
 
 =======
+<br />
 Author:529808348@qq.com
 
 <script language="JavaScript">
     var button1 = document.getElementById("button1")
     button1.onclick = function() {
-        ngui.move(100, 200)
+        var retVal = ngui.move(100, 200)
+        alert("Return from go: " + retVal)
     }
 </script>
 
