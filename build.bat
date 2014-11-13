@@ -2,24 +2,25 @@
     @del "main-res.syso"
 )
 
-@if exist "%~dp0Release\ngui.exe" (
-    @del "%~dp0Release\ngui.exe"
+@if exist "%~dp0Release\example1.exe" (
+    @del "%~dp0Release\example1.exe"
 )
 
+cd examples\example1
+
 windres -o main-res.syso main.rc
-rem go build -o Release\ngui.exe
 
 
 IF "%1"=="noconsole" (
-    go build -ldflags="-H windowsgui" -o Release/ngui.exe
+    go build -ldflags="-H windowsgui" -o ../../Release/example1.exe
     rem @if %ERRORLEVEL% neq 0 goto end
 ) else (
-    go build -o Release/ngui.exe
+    go build -o ../../Release/example1.exe
     rem @if %ERRORLEVEL% neq 0 goto end
 )
 
-cd Release
-ngui.exe
+cd ../../Release
+example1.exe
 cd ..
 
 pause

@@ -1,6 +1,6 @@
 #include "resource.h"
 
-IDR_MAINFRAME ICON "res/ngui.ico"
+IDR_MAINFRAME ICON "res/main.ico"
 1 24 "main.exe.manifest"
 
 2 VERSIONINFO
