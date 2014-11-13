@@ -95,11 +95,13 @@ func MustRegisterWindowClass(className string) {
 
 func CreateWindowEx(title string, wndproc uintptr) (hwnd syscall.Handle, err error) {
 	var hwndParent win.HWND = 0
+
 	hWnd := win.CreateWindowEx(
 		0,
 		syscall.StringToUTF16Ptr(nguiWindowClass),
 		nil,
-		win.WS_OVERLAPPEDWINDOW, //|win.WS_CLIPSIBLINGS,win.CW_USEDEFAULT,
+		win.WS_OVERLAPPEDWINDOW, //|win.WS_CLIPSIBLINGS,
+		win.CW_USEDEFAULT,
 		win.CW_USEDEFAULT,
 		win.CW_USEDEFAULT,
 		win.CW_USEDEFAULT,
