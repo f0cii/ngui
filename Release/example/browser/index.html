@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link href="css/style.css" rel="stylesheet" />
+
+<style>
+#frameb{ 
+	display: block;
+	clear: both ;
+	width: calc(100% - 5px); 
+ 
+  height:calc(100% - 65px); 
+  margin: 43px 0px  0px 0px ; 
+  padding: 0px 0px ;
+  border: 1px solid #cecece; 
+}
+
+
+
+
+</style>
+<script src="./jquery.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+ 
+	  
+function keys( e  ){
+ 
+ 
+var ss = $("#lstib").val();
+ if(ss.indexOf('http')==-1) {
+ 	ss = "http://" + ss ;
+ }
+ 
+	if (e.keyCode ==13)
+	{
+		$("#frameb").attr("src" ,ss)
+	}
+
+}
+
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
+<body>
+<div id="container">
+<div id="header"></div>
+<div id="makeBtn" title=""></div>
+<div id="refreshBtn" title="刷新"></div>
+<div id="closeBtn" title=""></div>
+<div id="miniBtn"></div>
+<div id="devBtn" title="检查元素"></div>
+<div id="transparentBtn" title="切换渲染模式（是否透明）"></div>
+<div id="title"  >透明浏览器</div>
+<input class="gsfi" id="lstib" style="" spellcheck="false" onkeyup="keys(event  );" >
+<iframe src="" id="frameb"></iframe>
+</div>
+
+</body>
+</html>
