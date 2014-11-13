@@ -45,8 +45,6 @@ func (this *Engine) init() (err error) {
 			fmt.Printf("Calling V8Callback args: %d %d %v %s\n", arg0, arg1, arg2, arg3)
 		}))*/
 
-	//registerV8Handlers()
-
 	cef.ExecuteProcess(unsafe.Pointer(hInstance))
 
 	settings := cef.Settings{}
