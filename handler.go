@@ -18,7 +18,7 @@ func v8_move(browser *cef.Browser, args []cef.V8Value) {
 	x := cef.V8ValueToInt32(args[0])
 	y := cef.V8ValueToInt32(args[1])
 	fmt.Printf("v8_move x=%v,y=%v\n", x, y)
-	hWnd := browser.GetWindowHandle()
+	/*hWnd := browser.GetWindowHandle()
 
 	h := (win.HWND)(unsafe.Pointer(hWnd))
 	var rect win.RECT
@@ -27,5 +27,6 @@ func v8_move(browser *cef.Browser, args []cef.V8Value) {
 	height := int32(rect.Bottom - rect.Top)
 
 	win.MoveWindow(h, x, y, width, height, false)
+	*/
 	//cef.WindowResized(unsafe.Pointer(hWnd))
 }

@@ -6,26 +6,34 @@
 package ngui
 
 import (
-	"github.com/nvsoft/cef"
+	"errors"
 	"log"
 	"os"
 	"syscall"
 	"time"
 	"unsafe"
-	"github.com/nvsoft/wingui"
-	//"fmt"
+	"github.com/nvsoft/cef"
+	"github.com/nvsoft/win"
 )
 
+var IDR_MAINFRAME = win.MAKEINTRESOURCE(100)
 var Logger *log.Logger = log.New(os.Stdout, "[main] ", log.Lshortfile)
 var wndproc = syscall.NewCallback(WndProc)
+
+const nguiWindowClass = `\o/ NGui_Window_Class \o/`
+
+func init() {
+	MustRegisterWindowClass(nguiWindowClass)
+}
 
 type Engine struct {
 }
 
-func (this *Engine) init() {
-	hInstance, e := wingui.GetModuleHandle(nil)
-	if e != nil {
-		wingui.AbortErrNo("GetModuleHandle", e)
+func (this *Engine) init() (err error) {
+	hInstance := win.GetModuleHandle(nil)
+	if hInstance == 0 {
+		err = errors.New("GetModuleHandle")
+		return
 	}
 
 	// you need to register to the callback before we fork processes
@@ -51,11 +59,70 @@ func (this *Engine) init() {
 	//settings.LogFile = cwd + "/debug.log"
 	//settings.RemoteDebuggingPort = 7000
 	cef.Initialize(settings)
+
+	return
+}
+
+func MustRegisterWindowClass(className string) {
+	hInst := win.GetModuleHandle(nil)
+	if hInst == 0 {
+		panic("GetModuleHandle")
+	}
+
+	hIcon := win.LoadIcon(0, (*uint16)(unsafe.Pointer(uintptr(win.IDI_APPLICATION))))
+	if hIcon == 0 {
+		panic("LoadIcon")
+	}
+
+	hCursor := win.LoadCursor(0, (*uint16)(unsafe.Pointer(uintptr(win.IDC_ARROW))))
+	if hCursor == 0 {
+		panic("LoadCursor")
+	}
+
+	var wc win.WNDCLASSEX
+	wc.CbSize = uint32(unsafe.Sizeof(wc))
+	wc.LpfnWndProc = wndproc
+	wc.HInstance = hInst
+	wc.HIcon = hIcon
+	wc.HCursor = hCursor
+	wc.HbrBackground = win.COLOR_BTNFACE+1
+	wc.LpszClassName = syscall.StringToUTF16Ptr(className)
+
+	if atom := win.RegisterClassEx(&wc); atom == 0 {
+		panic("RegisterClassEx")
+	}
+}
+
+func CreateWindowEx(title string, wndproc uintptr) (hwnd syscall.Handle, err error) {
+	var hwndParent win.HWND = 0
+	hWnd := win.CreateWindowEx(
+		0,
+		syscall.StringToUTF16Ptr(nguiWindowClass),
+		nil,
+		win.WS_OVERLAPPEDWINDOW, //|win.WS_CLIPSIBLINGS,win.CW_USEDEFAULT,
+		win.CW_USEDEFAULT,
+		win.CW_USEDEFAULT,
+		win.CW_USEDEFAULT,
+		hwndParent,
+		0,
+		0,
+		nil)
+	if hWnd == 0 {
+		err = errors.New("CreateWindowEx")
+		return
+	}
+
+	// ShowWindow
+	win.ShowWindow(hWnd, win.SW_SHOWDEFAULT)
+
+	hwnd = syscall.Handle(hWnd)
+
+	return
 }
 
 func (this *Engine) CreateWindow(url string) {
 	Logger.Println("CreateWindow")
-	hwnd := wingui.CreateWindow("ngui window", wndproc)
+	hwnd, _ := CreateWindowEx("ngui window", wndproc)
 
 	browserSettings := cef.BrowserSettings{}
 
@@ -88,21 +155,21 @@ func NewEngine() *Engine {
 	return e
 }
 
-func WndProc(hwnd syscall.Handle, msg uint32, wparam, lparam uintptr) (rc uintptr) {
+func WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) (result uintptr) {
 	switch msg {
-	case wingui.WM_CREATE:
-		rc = wingui.DefWindowProc(hwnd, msg, wparam, lparam)
-	case wingui.WM_SIZE:
+	case win.WM_CREATE:
+		result = win.DefWindowProc(hwnd, msg, wParam, lParam)
+	case win.WM_SIZE:
 		// 最小化时不能调整Cef窗体，否则恢复时界面一片空白
-		if (wparam == wingui.SIZE_RESTORED || wparam == wingui.SIZE_MAXIMIZED) {
+		if (wParam == win.SIZE_RESTORED || wParam == win.SIZE_MAXIMIZED) {
 			cef.WindowResized(unsafe.Pointer(hwnd))
 		}
-	case wingui.WM_CLOSE:
-		wingui.DestroyWindow(hwnd)
-	case wingui.WM_DESTROY:
+	case win.WM_CLOSE:
+		win.DestroyWindow(hwnd)
+	case win.WM_DESTROY:
 		cef.QuitMessageLoop()
 	default:
-		rc = wingui.DefWindowProc(hwnd, msg, wparam, lparam)
+		result = win.DefWindowProc(hwnd, msg, wParam, lParam)
 	}
 	return
 }
