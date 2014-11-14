@@ -24,8 +24,9 @@ func v8_move(browser *cef.Browser, args []cef.V8Value) (result interface {}) {
 	// 调用Js
 	browser.ExecuteJavaScript("console.log('something from go invoke');alert('something from go invoke');", "go.js", 1)
 
-	/*hWnd := browser.GetWindowHandle()
-
+	//hWnd := browser.GetWindowHandle()
+	//fmt.Printf("v8_move hWnd=%v\n", hWnd)
+	/*
 	h := (win.HWND)(hWnd)
 	var rect win.RECT
 	win.GetWindowRect(h, &rect)

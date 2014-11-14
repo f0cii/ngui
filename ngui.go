@@ -10,7 +10,7 @@ import (
 	"log"
 	"os"
 	"syscall"
-	"time"
+	//"time"
 	"unsafe"
 	"github.com/nvsoft/cef"
 	"github.com/nvsoft/win"
@@ -123,6 +123,8 @@ func CreateWindowEx(title string, wndproc uintptr) (hwnd syscall.Handle, err err
 func (this *Engine) CreateWindow(url string) {
 	Logger.Println("CreateWindow")
 	hwnd, _ := CreateWindowEx("ngui window", wndproc)
+	//wh := win.HWND(hwnd)
+	//win.ShowWindow(wh, win.SW_HIDE)
 
 	browserSettings := cef.BrowserSettings{}
 
@@ -131,14 +133,15 @@ func (this *Engine) CreateWindow(url string) {
 		//browser := cef.CreateBrowser(unsafe.Pointer(hwnd), &browserSettings, url, false)
 		cef.CreateBrowser(unsafe.Pointer(hwnd), &browserSettings, url, false)
 		//cef.WindowResized(unsafe.Pointer(hwnd))
+		//win.ShowWindow(wh, win.SW_SHOWNORMAL)
 		//browser.ExecuteJavaScript("console.log('we outchea');ngui.callback('sup', 10, 10, true, 'something');", "sup.js", 1)
 	}()
 
 	// It should be enough to call WindowResized after 10ms,
 	// though to be sure let's extend it to 100ms.
-	time.AfterFunc(time.Millisecond*100, func() {
-			cef.WindowResized(unsafe.Pointer(hwnd))
-		})
+	//time.AfterFunc(time.Millisecond*100, func() {
+	//		cef.WindowResized(unsafe.Pointer(hwnd))
+	//	})
 }
 
 func (e *Engine) Exec() {
