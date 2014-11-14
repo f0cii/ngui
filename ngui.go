@@ -10,7 +10,7 @@ import (
 	"log"
 	"os"
 	"syscall"
-	//"time"
+	"time"
 	"unsafe"
 	"github.com/nvsoft/cef"
 	"github.com/nvsoft/win"
@@ -139,9 +139,9 @@ func (this *Engine) CreateWindow(url string) {
 
 	// It should be enough to call WindowResized after 10ms,
 	// though to be sure let's extend it to 100ms.
-	//time.AfterFunc(time.Millisecond*100, func() {
-	//		cef.WindowResized(unsafe.Pointer(hwnd))
-	//	})
+	time.AfterFunc(time.Millisecond*100, func() {
+			cef.WindowResized(unsafe.Pointer(hwnd))
+		})
 }
 
 func (e *Engine) Exec() {
