@@ -5,8 +5,8 @@
 package main
 
 import (
-	"os"
 	"github.com/nvsoft/ngui"
+	"os"
 )
 
 func main() {
@@ -20,4 +20,3 @@ func main() {
 
 	app.Exec()
 }
-

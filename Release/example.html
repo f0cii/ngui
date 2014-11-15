@@ -50,8 +50,9 @@ Author:529808348@qq.com
 <script language="JavaScript">
     var button1 = document.getElementById("button1")
     button1.onclick = function() {
-        var retVal = ngui.move(100, 200)
-        alert("Return from go: " + retVal)
+        ngui.setTitle("这是JS设置的标题")
+        var retVal = ngui.sizeTo(800, 600)
+        //alert("Return from go: " + retVal)
     }
 </script>
 

@@ -7,13 +7,13 @@ package ngui
 
 import (
 	"errors"
+	"github.com/nvsoft/cef"
+	"github.com/nvsoft/win"
 	"log"
 	"os"
 	"syscall"
 	"time"
 	"unsafe"
-	"github.com/nvsoft/cef"
-	"github.com/nvsoft/win"
 )
 
 var IDR_MAINFRAME = win.MAKEINTRESOURCE(100)
@@ -38,12 +38,12 @@ func (this *Engine) init() (err error) {
 
 	// you need to register to the callback before we fork processes
 	/*cef.RegisterV8Callback("sup", cef.V8Callback(func(args []cef.V8Value) {
-			arg0 := cef.V8ValueToInt32(args[0])
-			arg1 := cef.V8ValueToInt32(args[1])
-			arg2 := cef.V8ValueToBool(args[2])
-			arg3 := cef.V8ValueToString(args[3])
-			fmt.Printf("Calling V8Callback args: %d %d %v %s\n", arg0, arg1, arg2, arg3)
-		}))*/
+		arg0 := cef.V8ValueToInt32(args[0])
+		arg1 := cef.V8ValueToInt32(args[1])
+		arg2 := cef.V8ValueToBool(args[2])
+		arg3 := cef.V8ValueToString(args[3])
+		fmt.Printf("Calling V8Callback args: %d %d %v %s\n", arg0, arg1, arg2, arg3)
+	}))*/
 
 	cef.ExecuteProcess(unsafe.Pointer(hInstance))
 
@@ -83,7 +83,7 @@ func MustRegisterWindowClass(className string) {
 	wc.HInstance = hInst
 	wc.HIcon = hIcon
 	wc.HCursor = hCursor
-	wc.HbrBackground = win.COLOR_BTNFACE+1
+	wc.HbrBackground = win.COLOR_BTNFACE + 1
 	wc.LpszClassName = syscall.StringToUTF16Ptr(className)
 
 	if atom := win.RegisterClassEx(&wc); atom == 0 {
@@ -140,8 +140,8 @@ func (this *Engine) CreateWindow(url string) {
 	// It should be enough to call WindowResized after 10ms,
 	// though to be sure let's extend it to 100ms.
 	time.AfterFunc(time.Millisecond*100, func() {
-			cef.WindowResized(unsafe.Pointer(hwnd))
-		})
+		cef.WindowResized(unsafe.Pointer(hwnd))
+	})
 }
 
 func (e *Engine) Exec() {
@@ -164,7 +164,7 @@ func WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) (result uintptr)
 		result = win.DefWindowProc(hwnd, msg, wParam, lParam)
 	case win.WM_SIZE:
 		// 最小化时不能调整Cef窗体，否则恢复时界面一片空白
-		if (wParam == win.SIZE_RESTORED || wParam == win.SIZE_MAXIMIZED) {
+		if wParam == win.SIZE_RESTORED || wParam == win.SIZE_MAXIMIZED {
 			cef.WindowResized(unsafe.Pointer(hwnd))
 		}
 	case win.WM_CLOSE:
