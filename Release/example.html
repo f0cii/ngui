@@ -23,25 +23,31 @@ More to come.
 <a href="http://www.baidu.com/" target="_blank">百度 target _blank</a> <br/>
 <h3>html5 example:</h3>
 
-<a href="http://www.effectgames.com/demos/canvascycle/">http://www.effectgames.com/demos/canvascycle/</a><br/>
-<a href="http://hakim.se/experiments/html5/magnetic/02/" target="_blank">http://hakim.se/experiments/html5/magnetic/02/</a><br/>
+<a href="http://www.effectgames.com/demos/canvascycle/">http://www.effectgames.com/demos/canvascycle/</a> 
+<a href="http://hakim.se/experiments/html5/magnetic/02/" target="_blank">http://hakim.se/experiments/html5/magnetic/02/</a> 
 
-<a href="http://tryit.jssip.net/" target="_blank">WebRTC Demo</a><br/>
-<a href="http://web.linphone.org/" target="_blank">http://web.linphone.org/</a><br/>
+<a href="http://tryit.jssip.net/" target="_blank">WebRTC Demo</a> 
+<a href="http://web.linphone.org/" target="_blank">http://web.linphone.org/</a> 
 <h3>Jquery Easy UI example:</h3>
-<a href="file:///./example/demo/layout/full.html" target="_blank">Layout</a><br/>
+<a href="file:///./example/demo/layout/full.html" target="_blank">Layout</a> 
 
-<a href="file:///./example/demo/layout/complex.html" target="_blank">Complex Layout</a><br/>
-<a href="file:///./example/tinymce/tinymce.html" target="_blank">TinyMCE Editor</a><br/>
+<a href="file:///./example/demo/layout/complex.html" target="_blank">Complex Layout</a>  
+<a href="file:///./example/tinymce/tinymce.html" target="_blank">TinyMCE Editor</a>  
 <a href="file:///./example/browser/index.html" target="_blank">Browser</a><br/>
 <br/>
-<h3>widget example:</h3>
+<h3>JS example:</h3>
 <p>
-    <input id="button1" name="button1" type="button" value="Chick me" />
+    <input id="button1" name="button1" type="button" value="Set title" />
+
+     <input id="button2" name="button2" type="button" value="Set size" />
+
+       <input id="button3" name="button3" type="button" value="Set position" />
+
+        <input id="button4" name="button4" type="button" value="Set maximize" />
 </p>
 <br />
-<br />
 
+ 
 
 =======
 <br />
@@ -51,9 +57,26 @@ Author:529808348@qq.com
     var button1 = document.getElementById("button1")
     button1.onclick = function() {
         ngui.setTitle("这是JS设置的标题")
-        var retVal = ngui.sizeTo(800, 600)
+      //  var retVal = ngui.sizeTo(800, 600)
         //alert("Return from go: " + retVal)
     }
+
+
+    var button2 = document.getElementById("button2")
+    button2.onclick = function() {
+    	ngui.sizeTo(900, 700) 
+    }
+
+ var button3 = document.getElementById("button3")
+    button3.onclick = function() {
+    	ngui.moveTo(30, 30) 
+    }
+
+ var button4 = document.getElementById("button4")
+    button4.onclick = function() {
+    	ngui.maximize( ) 
+    }
+
 </script>
 
 </body>
