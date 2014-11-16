@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
+<title>Ngui窗体示例</title>
 <style type=text/css>
 h1 { font: Arial 18px; }
 body { font-size: 14px ; background-color: #ccccff ;  }
@@ -10,29 +10,29 @@ body { font-size: 14px ; background-color: #ccccff ;  }
 </head>
 <body>
 
-<h1>ngui example</h1>
+<h1>Ngui example</h1>
 
 This is a basic example of embedding Chromium browser in Go application.
 More to come.
 
- <br/>
+<br/>
 <a href="http://www.163.com/">http://www.163.com/</a> <br/>
 <a href="http://www.daqid.com/">DADI</a> <br/>
 <a href="http://www.baidu.com/">百度</a> <br/>
 
 <a href="http://www.baidu.com/" target="_blank">百度 target _blank</a> <br/>
-<h3>html5 example:</h3>
+<h3>Html5 example:</h3>
 
-<a href="http://www.effectgames.com/demos/canvascycle/">http://www.effectgames.com/demos/canvascycle/</a> 
-<a href="http://hakim.se/experiments/html5/magnetic/02/" target="_blank">http://hakim.se/experiments/html5/magnetic/02/</a> 
+<a href="http://www.effectgames.com/demos/canvascycle/">http://www.effectgames.com/demos/canvascycle/</a><br/>
+<a href="http://hakim.se/experiments/html5/magnetic/02/" target="_blank">http://hakim.se/experiments/html5/magnetic/02/</a><br/>
 
-<a href="http://tryit.jssip.net/" target="_blank">WebRTC Demo</a> 
-<a href="http://web.linphone.org/" target="_blank">http://web.linphone.org/</a> 
+<a href="http://tryit.jssip.net/" target="_blank">WebRTC Demo</a><br/>
+<a href="http://web.linphone.org/" target="_blank">http://web.linphone.org/</a><br/>
 <h3>Jquery Easy UI example:</h3>
-<a href="file:///./example/demo/layout/full.html" target="_blank">Layout</a> 
+<a href="file:///./example/demo/layout/full.html" target="_blank">Layout</a><br/>
 
-<a href="file:///./example/demo/layout/complex.html" target="_blank">Complex Layout</a>  
-<a href="file:///./example/tinymce/tinymce.html" target="_blank">TinyMCE Editor</a>  
+<a href="file:///./example/demo/layout/complex.html" target="_blank">Complex Layout</a><br/>
+<a href="file:///./example/tinymce/tinymce.html" target="_blank">TinyMCE Editor</a><br/>
 <a href="file:///./example/browser/index.html" target="_blank">Browser</a><br/>
 <br/>
 <h3>JS example:</h3>
@@ -41,13 +41,13 @@ More to come.
 
      <input id="button2" name="button2" type="button" value="Set size" />
 
-       <input id="button3" name="button3" type="button" value="Set position" />
+     <input id="button3" name="button3" type="button" value="Set position" />
 
-        <input id="button4" name="button4" type="button" value="Set maximize" />
+     <input id="button4" name="button4" type="button" value="Set maximize" />
 </p>
 <br />
+<br />
 
- 
 
 =======
 <br />
@@ -61,13 +61,12 @@ Author:529808348@qq.com
         //alert("Return from go: " + retVal)
     }
 
-
     var button2 = document.getElementById("button2")
     button2.onclick = function() {
     	ngui.sizeTo(900, 700) 
     }
 
- var button3 = document.getElementById("button3")
+    var button3 = document.getElementById("button3")
     button3.onclick = function() {
     	ngui.moveTo(30, 30) 
     }

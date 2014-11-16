@@ -1,0 +1,10 @@
+{
+  "first_page": "example.html",
+  "application_title": "Hello Ngui!",
+  "version": "1.0",
+  "locale": "zh-CN",
+  "cache_path": "data",
+  "launch_width": 800,
+  "launch_height": 600,
+  "enable_transparent": true
+}

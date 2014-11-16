@@ -6,17 +6,12 @@ package main
 
 import (
 	"github.com/nvsoft/ngui"
-	"os"
 )
 
 func main() {
-	app := ngui.NewEngine()
+	app := ngui.NewApplication()
 
-	// TODO: It should be executable's directory used
-	// rather than working directory.
-	url, _ := os.Getwd()
-	url = "file://" + url + "/example.html"
-	app.CreateWindow(url)
+	app.CreateBrowser()
 
 	app.Exec()
 }
