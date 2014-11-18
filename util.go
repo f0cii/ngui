@@ -1,14 +1,14 @@
 package ngui
 
 import (
+	"errors"
+	"fmt"
+	"github.com/nvsoft/win"
 	"path/filepath"
 	"strings"
 	"syscall"
 	"unicode/utf16"
 	"unsafe"
-	"errors"
-	"github.com/nvsoft/win"
-	"fmt"
 )
 
 var (

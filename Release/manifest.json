@@ -1,10 +1,10 @@
 {
-  "first_page": "example.html",
+  "first_page": "popup_win.html",
   "application_title": "Hello Ngui!",
   "version": "1.0",
   "locale": "zh-CN",
   "cache_path": "data",
-  "launch_width": 960,
-  "launch_height": 680,
+  "width": 302,
+  "height": 361,
   "enable_transparent": true
 }

@@ -19,8 +19,9 @@ import (
 )
 
 const (
-	ICON_MAIN   = 101
+	ICON_MAIN = 101
 )
+
 var hInstance win.HINSTANCE
 var Logger *log.Logger = log.New(os.Stdout, "[main] ", log.Lshortfile)
 var wndProc = syscall.NewCallback(WndProc)
@@ -47,13 +48,10 @@ func (this *Application) init() (err error) {
 	cef.ExecuteProcess(unsafe.Pointer(hInstance))
 
 	settings := cef.Settings{}
-	settings.CachePath = "webcache"                // Set to empty to disable
+	settings.CachePath = manifest.CachePath()      // Set to empty to disable
 	settings.LogSeverity = cef.LOGSEVERITY_DEFAULT // LOGSEVERITY_VERBOSE
-	//settings.ResourcesDirPath = releasePath
 	//settings.LocalesDirPath = releasePath + "/locales"
-	//settings.CachePath = cwd + "/webcache"      // Set to empty to disable
-	//settings.LogSeverity = cef.LOGSEVERITY_INFO // LOGSEVERITY_VERBOSE
-	//settings.LogFile = cwd + "/debug.log"
+	settings.Locale = manifest.Locale() //"zh-CN"
 	//settings.RemoteDebuggingPort = 7000
 	cef.Initialize(settings)
 
@@ -127,20 +125,20 @@ func (this *Application) CreateBrowserWindow(url string, enable_transparent bool
 	var x, y int32
 	var width, height int32
 
-	width = manifest.LaunchWidth()
-	height = manifest.LaunchHeight()
+	width = manifest.Width()
+	height = manifest.Height()
 	x = (win.GetSystemMetrics(win.SM_CXSCREEN) - width) / 2
-	y = (win.GetSystemMetrics(win.SM_CYSCREEN) - height) / 2 - 2
+	y = (win.GetSystemMetrics(win.SM_CYSCREEN)-height)/2 - 2
 
 	renderWindow := win.CreateWindowEx(
 		dwExStyle,
 		syscall.StringToUTF16Ptr(nguiTransparentWindowClass),
 		nil,
 		dwStyle, //|win.WS_CLIPSIBLINGS,
-		x,     //win.CW_USEDEFAULT,
-		y,     //win.CW_USEDEFAULT,
-		width,     //win.CW_USEDEFAULT,
-		height,     //win.CW_USEDEFAULT,
+		x,       //win.CW_USEDEFAULT,
+		y,       //win.CW_USEDEFAULT,
+		width,   //win.CW_USEDEFAULT,
+		height,  //win.CW_USEDEFAULT,
 		0,       //hwndParent
 		0,
 		0, //hInstance
@@ -166,7 +164,7 @@ func (this *Application) CreateBrowserWindow(url string, enable_transparent bool
 			win.MoveWindow(renderWindow, x, y, width, height, false)
 			win.SetWindowPos(renderWindow, 0, x, y, width, height, win.SWP_NOZORDER|win.SWP_NOACTIVATE|win.SWP_NOSIZE)
 		} else {
-			win.MoveWindow(renderWindow, x, y, width, height, false);
+			win.MoveWindow(renderWindow, x, y, width, height, false)
 		}
 
 		cef.WindowResized(unsafe.Pointer(renderWindow))

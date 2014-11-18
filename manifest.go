@@ -11,8 +11,10 @@ const (
 	manifest_filename  = `manifest.json`
 	first_page         = `first_page`
 	application_title  = `application_title`
-	launch_width       = `launch_width`
-	launch_height      = `launch_height`
+	locale             = `locale`
+	cache_path         = `cache_path`
+	width              = `width`
+	height             = `height`
 	enable_transparent = `enable_transparent`
 )
 
@@ -30,16 +32,24 @@ func (a *Manifest) ApplicationTitle() string {
 	return a.Get(application_title).(string)
 }
 
+func (a *Manifest) Locale() string {
+	return a.Get(locale).(string)
+}
+
+func (a *Manifest) CachePath() string {
+	return a.Get(cache_path).(string)
+}
+
 func (a *Manifest) EnableTransparent() bool {
 	return a.Get(enable_transparent).(bool)
 }
 
-func (a *Manifest) LaunchWidth() int32 {
-	return int32(a.Get(launch_width).(float64))
+func (a *Manifest) Width() int32 {
+	return int32(a.Get(width).(float64))
 }
 
-func (a *Manifest) LaunchHeight() int32 {
-	return int32(a.Get(launch_height).(float64))
+func (a *Manifest) Height() int32 {
+	return int32(a.Get(height).(float64))
 }
 
 func (a *Manifest) Get(key string) interface{} {
