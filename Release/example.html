@@ -6,10 +6,11 @@
 <style type=text/css>
 h1 { font: Arial 18px; }
 body { font-size: 14px ; background-color: #ccccff ;  }
+#title{width:200px; height:20px; background:pink; cursor:move; position:absolute; left:0px; top:0px} 
 </style>
 </head>
 <body>
-
+<div id="title"></div>
 <h1>Ngui example</h1>
 
 This is a basic example of embedding Chromium browser in Go application.
@@ -44,6 +45,8 @@ More to come.
      <input id="button3" name="button3" type="button" value="Set position" />
 
      <input id="button4" name="button4" type="button" value="Set maximize" />
+
+     <input id="button5" name="button5" type="button" value="Move" />
 </p>
 <br />
 <br />
@@ -71,9 +74,16 @@ Author:529808348@qq.com
     	ngui.moveTo(30, 30) 
     }
 
- var button4 = document.getElementById("button4")
+    var button4 = document.getElementById("button4")
     button4.onclick = function() {
     	ngui.maximize( ) 
+    }
+
+    var title = document.getElementById("title")
+    title.onmousedown = function(e) {
+      //alert('aa');
+    	ngui.move( e.screenX, e.screenY );
+    	return false;
     }
 
 </script>

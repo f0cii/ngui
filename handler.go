@@ -9,11 +9,17 @@ import (
 
 var printf = fmt.Println
 
+const (
+	SC_DRAGMOVE = 0xF012
+)
+
 // 调用Js
 //browser.ExecuteJavaScript("console.log('something from go invoke');alert('something from go invoke');", "go.js", 1)
 
 // 初始化Handler
 func init() {
+	cef.RegisterV8Handler("createWindow", win_handler_create_window)
+	cef.RegisterV8Handler("move", win_handler_move)
 	cef.RegisterV8Handler("restore", win_handler_restore)
 	cef.RegisterV8Handler("minimize", win_handler_minimize)
 	cef.RegisterV8Handler("maximize", win_handler_maximize)
@@ -24,19 +30,34 @@ func init() {
 	cef.RegisterV8Handler("quit", win_handler_quit)
 }
 
-// 恢复窗口
+// 创建窗口
 func win_handler_create_window(browser *cef.Browser, args []cef.V8Value) (result interface{}) {
-	fmt.Println("v8_restore")
+	fmt.Println("win_handler_create_window")
+
+	// TODO:创建窗口
+
+	return
+}
+
+// 移动窗口
+func win_handler_move(browser *cef.Browser, args []cef.V8Value) (result interface{}) {
+	fmt.Println("win_handler_move")
 
 	h := win.HWND(browser.GetWindowHandle())
-	win.ShowWindow(h, win.SW_RESTORE)
+	x := uint16(cef.V8ValueToInt32(args[0]))
+	y := uint16(cef.V8ValueToInt32(args[1]))
+	//win.ReleaseCapture()
+	fmt.Printf("win_handler_move x=%v,y=%v\n", x, y)
+	//win.SendMessage(h, win.WM_NCLBUTTONDOWN, win.HTCAPTION, uintptr(win.MAKELONG(x, y)))
+	win.ReleaseCapture()
+	win.PostMessage(h, win.WM_SYSCOMMAND, SC_DRAGMOVE, 0)
 
 	return
 }
 
 // 恢复窗口
 func win_handler_restore(browser *cef.Browser, args []cef.V8Value) (result interface{}) {
-	fmt.Println("v8_restore")
+	fmt.Println("win_handler_restore")
 
 	h := win.HWND(browser.GetWindowHandle())
 	win.ShowWindow(h, win.SW_RESTORE)
@@ -46,7 +67,7 @@ func win_handler_restore(browser *cef.Browser, args []cef.V8Value) (result inter
 
 // 最小化窗口
 func win_handler_minimize(browser *cef.Browser, args []cef.V8Value) (result interface{}) {
-	fmt.Println("v8_minimize")
+	fmt.Println("win_handler_minimize")
 
 	h := win.HWND(browser.GetWindowHandle())
 	win.ShowWindow(h, win.SW_MINIMIZE)
@@ -56,7 +77,7 @@ func win_handler_minimize(browser *cef.Browser, args []cef.V8Value) (result inte
 
 // 最大化窗口
 func win_handler_maximize(browser *cef.Browser, args []cef.V8Value) (result interface{}) {
-	fmt.Println("v8_maximize")
+	fmt.Println("win_handler_maximize")
 
 	h := win.HWND(browser.GetWindowHandle())
 	win.ShowWindow(h, win.SW_MAXIMIZE)
@@ -74,7 +95,7 @@ func win_handler_close(browser *cef.Browser, args []cef.V8Value) (result interfa
 
 // 为窗口设置新的尺寸
 func win_handler_sizeTo(browser *cef.Browser, args []cef.V8Value) (result interface{}) {
-	fmt.Println("v8_sizeTo")
+	fmt.Println("win_handler_sizeTo")
 	width := cef.V8ValueToInt32(args[0])
 	height := cef.V8ValueToInt32(args[1])
 
@@ -82,7 +103,7 @@ func win_handler_sizeTo(browser *cef.Browser, args []cef.V8Value) (result interf
 	var rect win.RECT
 	win.GetWindowRect(h, &rect)
 
-	fmt.Printf("v8_sizeTo Left=%v,Right=%v,Width=%v,Height=%v\n", rect.Left, rect.Top, width, height)
+	fmt.Printf("win_handler_sizeTo Left=%v,Right=%v,Width=%v,Height=%v\n", rect.Left, rect.Top, width, height)
 	win.MoveWindow(h, rect.Left, rect.Top, width, height, true)
 
 	//result = 1
@@ -92,11 +113,11 @@ func win_handler_sizeTo(browser *cef.Browser, args []cef.V8Value) (result interf
 
 // 为窗口设置新的位置
 func win_handler_moveTo(browser *cef.Browser, args []cef.V8Value) (result interface{}) {
-	fmt.Println("v8_moveTo")
+	fmt.Println("win_handler_moveTo")
 	left := cef.V8ValueToInt32(args[0])
 	top := cef.V8ValueToInt32(args[1])
 
-	fmt.Printf("v8_moveTo left=%v,top=%v\n", left, top)
+	fmt.Printf("win_handler_moveTo left=%v,top=%v\n", left, top)
 
 	h := win.HWND(browser.GetWindowHandle())
 
@@ -105,7 +126,7 @@ func win_handler_moveTo(browser *cef.Browser, args []cef.V8Value) (result interf
 	width := int32(rect.Right - rect.Left)
 	height := int32(rect.Bottom - rect.Top)
 
-	fmt.Printf("v8_moveTo Left=%v,Right=%v,Width=%v,Height=%v\n", left, top, width, height)
+	fmt.Printf("win_handler_moveTo Left=%v,Right=%v,Width=%v,Height=%v\n", left, top, width, height)
 	win.MoveWindow(h, left, top, width, height, true)
 
 	return
@@ -123,10 +144,10 @@ func win_handler_setTitle(browser *cef.Browser, args []cef.V8Value) (result inte
 
 // 退出程序
 func win_handler_quit(browser *cef.Browser, args []cef.V8Value) (result interface{}) {
-
 	h := win.HWND(browser.GetWindowHandle())
 	win.SendMessage(h, win.WM_CLOSE, 0, 0)
 	//win.PostQuitMessage(0);
 	os.Exit(1)
+
 	return
 }
