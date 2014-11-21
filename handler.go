@@ -19,7 +19,7 @@ const (
 // 初始化Handler
 func init() {
 	cef.RegisterV8Handler("createWindow", win_handler_create_window)
-	cef.RegisterV8Handler("move", win_handler_move)
+	cef.RegisterV8Handler("startDrag", win_handler_startDrag)
 	cef.RegisterV8Handler("restore", win_handler_restore)
 	cef.RegisterV8Handler("minimize", win_handler_minimize)
 	cef.RegisterV8Handler("maximize", win_handler_maximize)
@@ -40,17 +40,17 @@ func win_handler_create_window(browser *cef.Browser, args []cef.V8Value) (result
 }
 
 // 移动窗口
-func win_handler_move(browser *cef.Browser, args []cef.V8Value) (result interface{}) {
-	fmt.Println("win_handler_move")
+func win_handler_startDrag(browser *cef.Browser, args []cef.V8Value) (result interface{}) {
+	fmt.Println("win_handler_startDrag")
 
 	h := win.HWND(browser.GetWindowHandle())
-	x := uint16(cef.V8ValueToInt32(args[0]))
-	y := uint16(cef.V8ValueToInt32(args[1]))
-	//win.ReleaseCapture()
-	fmt.Printf("win_handler_move x=%v,y=%v\n", x, y)
-	//win.SendMessage(h, win.WM_NCLBUTTONDOWN, win.HTCAPTION, uintptr(win.MAKELONG(x, y)))
-	win.ReleaseCapture()
-	win.PostMessage(h, win.WM_SYSCOMMAND, SC_DRAGMOVE, 0)
+
+	var pt win.POINT
+	win.GetCursorPos(&pt)
+
+	isDrag = true
+
+	win.PostMessage(h, win.WM_LBUTTONDOWN, win.HTCAPTION, uintptr(win.MAKELONG(uint16(pt.X), uint16(pt.Y))))
 
 	return
 }

@@ -6,7 +6,7 @@
 <style type=text/css>
 h1 { font: Arial 18px; }
 body { font-size: 14px ; background-color: #ccccff ;  }
-#title{width:200px; height:20px; background:pink; cursor:move; position:absolute; left:0px; top:0px} 
+#title{width:100%; height:20px; background:pink; position:absolute; left:0px; top:0px}
 </style>
 </head>
 <body>
@@ -81,9 +81,8 @@ Author:529808348@qq.com
 
     var title = document.getElementById("title")
     title.onmousedown = function(e) {
-      //alert('aa');
-    	ngui.move( e.screenX, e.screenY );
-    	return false;
+    	ngui.startDrag();
+    	return true;
     }
 
 </script>

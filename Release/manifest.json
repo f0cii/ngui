@@ -6,5 +6,6 @@
   "cache_path": "data",
   "width": 860,
   "height": 660,
+  "form_fixed": false,
   "enable_transparent": true
 }

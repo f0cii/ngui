@@ -15,6 +15,7 @@ const (
 	cache_path         = `cache_path`
 	width              = `width`
 	height             = `height`
+	form_fixed         = `form_fixed`
 	enable_transparent = `enable_transparent`
 )
 
@@ -38,6 +39,10 @@ func (a *Manifest) Locale() string {
 
 func (a *Manifest) CachePath() string {
 	return a.Get(cache_path).(string)
+}
+
+func (a *Manifest) FormFixed() bool {
+	return a.Get(form_fixed).(bool)
 }
 
 func (a *Manifest) EnableTransparent() bool {
