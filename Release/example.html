@@ -46,7 +46,7 @@ More to come.
 
      <input id="button4" name="button4" type="button" value="Set maximize" />
 
-     <input id="button5" name="button5" type="button" value="Move" />
+     <input id="button5" name="button5" type="button" value="Close" />
 </p>
 <br />
 <br />
@@ -79,10 +79,27 @@ Author:529808348@qq.com
     	ngui.maximize( ) 
     }
 
+    var button5 = document.getElementById("button5")
+    button5.onclick = function() {
+    	ngui.close( )
+    }
+
     var title = document.getElementById("title")
     title.onmousedown = function(e) {
-    	ngui.startDrag();
-    	return true;
+        switch (e.which) {
+            case 1:
+                // 按下左键
+                ngui.startDrag();
+                break;
+            case 2:
+                // 按下中键
+                break;
+            case 3:
+                // 按下右键
+                break;
+            default:
+                break;
+        }
     }
 
 </script>

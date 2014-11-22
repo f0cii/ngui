@@ -11,7 +11,7 @@ import (
 func main() {
 	app := ngui.NewApplication()
 
-	app.CreateBrowser()
+	app.CreateWindow()
 
 	app.Exec()
 }

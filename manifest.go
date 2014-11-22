@@ -13,10 +13,14 @@ const (
 	application_title  = `application_title`
 	locale             = `locale`
 	cache_path         = `cache_path`
+	style              = `style`
 	width              = `width`
 	height             = `height`
 	form_fixed         = `form_fixed`
 	enable_transparent = `enable_transparent`
+
+	WindowStyleNormal      = 0
+	WindowStyleCaptionLess = 1
 )
 
 type Manifest struct {
@@ -47,6 +51,10 @@ func (a *Manifest) FormFixed() bool {
 
 func (a *Manifest) EnableTransparent() bool {
 	return a.Get(enable_transparent).(bool)
+}
+
+func (a *Manifest) Style() int32 {
+	return int32(a.Get(style).(float64))
 }
 
 func (a *Manifest) Width() int32 {

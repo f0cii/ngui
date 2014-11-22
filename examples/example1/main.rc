@@ -7,6 +7,15 @@
 
 //////////////////////////////////////////////////////////////////////////////
 //
+// Generated from the TEXTINCLUDE 1 resource.
+//
+
+//
+//////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
 // Generated from the TEXTINCLUDE 2 resource.
 //
 
@@ -32,21 +41,21 @@
 // Default Language
 //
 
-LANGUAGE LANG_NEUTRAL,SUBLANG_NEUTRAL // Language neutral
+LANGUAGE 0x00,0x00 // Language neutral
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // Symbol definitions
 //
 
-#define ICON_MAIN                       101
+#define ICON_MAIN                       100
 
 //////////////////////////////////////////////////////////////////////////////
 //
 // ICON : Icon
 //
 
-ICON_MAIN ICON "res/main.ico"
+100 ICON "res/main.ico"
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -64,18 +73,18 @@ ICON_MAIN ICON "res/main.ico"
 BEGIN
   BLOCK "StringFileInfo" BEGIN
     BLOCK "080904E4" BEGIN
-      VALUE "OriginalFilename", "my_app.exe"
-      VALUE "LegalCopyright", "My Name"
-      VALUE "ProductVersion", "1.0"
-      VALUE "ProductName", "My App"
-      VALUE "FileDescription", "My excellent application"
       VALUE "CompanyName", "My Company Name"
-      VALUE "InternalName", "my_app"
+      VALUE "FileDescription", "My excellent application"
       VALUE "FileVersion", "1.0"
+      VALUE "InternalName", "my_app"
+      VALUE "LegalCopyright", "My Name"
+      VALUE "OriginalFilename", "my_app.exe"
+      VALUE "ProductName", "My App"
+      VALUE "ProductVersion", "1.0"
     END
   END
   BLOCK "VarFileInfo" BEGIN
-    VALUE "Translation", 0x0809, 1252 // Ó¢ï¿½ï¿½(Ó¢ï¿½ï¿½)
+    VALUE "Translation", 0x0809, 1252 // Ó¢Óï(Ó¢¹ú)
   END
 END
 
@@ -98,7 +107,7 @@ END
 
 1 TEXTINCLUDE
 BEGIN
-  "resource.h"
+  "\0"
 END
 
 2 TEXTINCLUDE

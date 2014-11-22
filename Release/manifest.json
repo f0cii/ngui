@@ -4,8 +4,9 @@
   "version": "1.0",
   "locale": "zh-CN",
   "cache_path": "data",
+  "style": 1,
   "width": 860,
   "height": 660,
   "form_fixed": false,
-  "enable_transparent": true
+  "enable_transparent": false
 }

@@ -4,6 +4,8 @@
   "version": "1.0",
   "locale": "zh-CN",
   "cache_path": "data",
+  "style": 1,
+  /* 窗口类型：0 - 正常窗口(normal); 1 - 无标题窗口(captionless) */
   "width": 800,
   "height": 600,
   "form_fixed": true,
