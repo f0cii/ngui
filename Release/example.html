@@ -38,15 +38,17 @@ More to come.
 <br/>
 <h3>JS example:</h3>
 <p>
+    <input id="button0" name="button0" type="button" value="透明浏览器" />
+
     <input id="button1" name="button1" type="button" value="Set title" />
 
-     <input id="button2" name="button2" type="button" value="Set size" />
+    <input id="button2" name="button2" type="button" value="Set size" />
 
-     <input id="button3" name="button3" type="button" value="Set position" />
+    <input id="button3" name="button3" type="button" value="Set position" />
 
-     <input id="button4" name="button4" type="button" value="Set maximize" />
+    <input id="button4" name="button4" type="button" value="Set maximize" />
 
-     <input id="button5" name="button5" type="button" value="Close" />
+    <input id="button5" name="button5" type="button" value="Close" />
 </p>
 <br />
 <br />
@@ -57,6 +59,12 @@ More to come.
 Author:529808348@qq.com
 
 <script language="JavaScript">
+    var button0 = document.getElementById("button0")
+    button0.onclick = function() {
+    	//ngui.createWindow("E:/Go/src/github.com/nvsoft/ngui/Release/example/default/index.html", true)
+    	ngui.createWindow("E:/Research/webtop-master/Release/default/index.htm", true)
+    }
+
     var button1 = document.getElementById("button1")
     button1.onclick = function() {
         ngui.setTitle("这是JS设置的标题")

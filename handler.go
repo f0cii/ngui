@@ -34,7 +34,9 @@ func init() {
 func win_handler_create_window(browser *cef.Browser, args []cef.V8Value) (result interface{}) {
 	fmt.Println("win_handler_create_window")
 
-	// TODO:创建窗口
+	url := cef.V8ValueToString(args[0])
+	captionless := cef.V8ValueToBool(args[1])
+	gApplication.CreateBrowserWindow(url, captionless)
 
 	return
 }

@@ -5,8 +5,8 @@
   "locale": "zh-CN",
   "cache_path": "data",
   "style": 1,
-  "width": 860,
-  "height": 660,
-  "form_fixed": false,
+  "width": 1020,
+  "height": 760,
+  "form_fixed": true,
   "enable_transparent": false
 }

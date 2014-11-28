@@ -16,6 +16,7 @@ import (
 	"syscall"
 	//"time"
 	"unsafe"
+	"strconv"
 )
 
 const (
@@ -26,6 +27,7 @@ const (
 	WindowProp_CaptionLess = "_captionless"
 )
 
+var gApplication *Application
 var hInstance win.HINSTANCE
 var Logger *log.Logger = log.New(os.Stdout, "[main] ", log.Lshortfile)
 var wndProc = syscall.NewCallback(WndProc)
@@ -38,7 +40,9 @@ var isEnableDrag = true
 var isDrag bool = false
 
 const nguiWindowClass = `\o/ NGui_Window_Class \o/`
-const nguiTransparentWindowClass = `\o/ NGui_Transparent_Window_Class \o/`
+const _NguiTransparentWindowClass = `\o/ NGui_Transparent_Window_Class \o/`
+
+var nguiTransparentWindowClass string
 
 func init() {
 	hInstance := win.GetModuleHandle(nil)
@@ -46,7 +50,8 @@ func init() {
 		panic("GetModuleHandle")
 	}
 	manifest.Load()
-	MustRegisterWindowClass(nguiWindowClass)
+	//MustRegisterWindowClass(nguiWindowClass)
+	nguiTransparentWindowClass = _NguiTransparentWindowClass + strconv.Itoa(os.Getpid())
 	MustRegisterTransparentWindowClass(nguiTransparentWindowClass)
 }
 
@@ -57,6 +62,7 @@ func (this *Application) init() (err error) {
 	cef.ExecuteProcess(unsafe.Pointer(hInstance))
 
 	settings := cef.Settings{}
+	settings.SingleProcess = 1	// 单进程模式
 	settings.CachePath = manifest.CachePath()      // Set to empty to disable
 	settings.LogSeverity = cef.LOGSEVERITY_DEFAULT // LOGSEVERITY_VERBOSE
 	//settings.LocalesDirPath = releasePath + "/locales"
@@ -120,7 +126,7 @@ func MustRegisterTransparentWindowClass(className string) {
 	wc.HInstance = hInstance
 	wc.HIcon = hIcon
 	wc.HCursor = hCursor
-	wc.HbrBackground = win.BS_SOLID//win.COLOR_WINDOW + 1 //COLOR_BTNFACE
+	wc.HbrBackground = win.BS_SOLID//win.BS_SOLID//win.COLOR_WINDOW + 1 //COLOR_BTNFACE
 	wc.LpszClassName = syscall.StringToUTF16Ptr(className)
 
 	if atom := win.RegisterClassEx(&wc); atom == 0 {
@@ -132,7 +138,8 @@ func MustRegisterTransparentWindowClass(className string) {
 func (this *Application) CreateBrowserWindow(url string, captionless bool) (err error) {
 	var dwExStyle, dwStyle uint32 = 0, 0
 	var captionlessFlag uintptr = 0
-	fmt.Printf("CreateBrowserWindow captionless=%v\n", captionless)
+	fmt.Printf("CreateBrowserWindow url=%v captionless=%v\n", url, captionless)
+
 	if captionless {
 		captionlessFlag = 1
 		//dwExStyle = 0//win.WS_EX_LAYERED
@@ -172,7 +179,7 @@ func (this *Application) CreateBrowserWindow(url string, captionless bool) (err 
 		0,       //hwndParent
 		0,
 		0, //hInstance
-		unsafe.Pointer(&captionlessFlag))
+		nil)
 	if renderWindow == 0 {
 		err = errors.New("CreateWindowEx")
 		return
@@ -189,10 +196,10 @@ func (this *Application) CreateBrowserWindow(url string, captionless bool) (err 
 
 		// WS_BORDER Creates a window that has a border.创建一个有边界的窗口。
 		// WS_EX_CLIENTEDGE Specifies that a window has a 3D look — that is, a border with a sunken edge.指定窗口具有3D外观，也即是一个下层的边缘。
-		gwlStyle := win.GetWindowLong(renderWindow, win.GWL_STYLE)
-		gwlStyle &= ^(win.WS_BORDER)
+		//gwlStyle := win.GetWindowLong(renderWindow, win.GWL_STYLE)
+		//gwlStyle &= ^(win.WS_BORDER)
 		//gwlStyle &= ^(win.WS_EX_CLIENTEDGE)
-		win.SetWindowLong(renderWindow, win.GWL_STYLE, gwlStyle)
+		//win.SetWindowLong(renderWindow, win.GWL_STYLE, gwlStyle)
 
 		//gwlExStyle := win.GetWindowLong(renderWindow, win.GWL_EXSTYLE)
 		//gwlExStyle |= win.WS_EX_LAYERED;
@@ -202,7 +209,7 @@ func (this *Application) CreateBrowserWindow(url string, captionless bool) (err 
 		// COLORREF col: 透明化颜色
 		// byte bAlpha: ＝0：整个窗口透明, =255 完全不透明
 		// uint32 dwFlags: ＝1：仅颜色 col 透明， =2 :窗口按照bAlpha变量进行透明处理。
-		//win.SetLayeredWindowAttributes(renderWindow, 0, 255, 2)
+		//win.SetLayeredWindowAttributes(renderWindow, win.BS_SOLID, 0, 2)
 		//win.UpdateWindow(renderWindow)
 	}
 
@@ -243,10 +250,14 @@ func (this *Application) CreateBrowserWindow(url string, captionless bool) (err 
 // 创建应用程序主窗口
 func (this *Application) CreateWindow() {
 	url := manifest.FirstPage()
-	//wd, _ := os.Getwd()
-	d := ExePath()
-	d = strings.Replace(d, "\\", "/", -1)
-	url = "file:///" + d + "/" + url
+	if strings.HasPrefix(url, "http://") {
+		//
+	} else {
+		//wd, _ := os.Getwd()
+		d := ExePath()
+		d = strings.Replace(d, "\\", "/", -1)
+		url = "file:///" + d + "/" + url
+	}
 	fmt.Printf("CreateWindow url=%s\n", url)
 	captionless := (manifest.Style() == WindowStyleCaptionLess)
 	this.CreateBrowserWindow(url, captionless)
@@ -259,10 +270,10 @@ func (e *Application) Exec() {
 }
 
 func NewApplication() *Application {
-	app := new(Application)
-	app.init()
+	gApplication = new(Application)
+	gApplication.init()
 
-	return app
+	return gApplication
 }
 
 func WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) (result uintptr) {
