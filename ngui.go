@@ -62,7 +62,7 @@ func (this *Application) init() (err error) {
 	cef.ExecuteProcess(unsafe.Pointer(hInstance))
 
 	settings := cef.Settings{}
-	settings.SingleProcess = 1	// 单进程模式
+	//settings.SingleProcess = 1	// 单进程模式
 	settings.CachePath = manifest.CachePath()      // Set to empty to disable
 	settings.LogSeverity = cef.LOGSEVERITY_DEFAULT // LOGSEVERITY_VERBOSE
 	//settings.LocalesDirPath = releasePath + "/locales"
