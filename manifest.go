@@ -18,6 +18,7 @@ const (
 	height             = `height`
 	form_fixed         = `form_fixed`
 	enable_transparent = `enable_transparent`
+	browser_subprocess_path = `browser_subprocess_path`
 
 	WindowStyleNormal      = 0
 	WindowStyleCaptionLess = 1
@@ -28,6 +29,10 @@ type Manifest struct {
 }
 
 type revManifest map[string]interface{}
+
+func (a *Manifest) BrowserSubprocessPath() string {
+	return a.Get(browser_subprocess_path).(string)
+}
 
 func (a *Manifest) FirstPage() string {
 	return a.Get(first_page).(string)

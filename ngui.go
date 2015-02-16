@@ -49,16 +49,50 @@ func init() {
 	if hInstance == 0 {
 		panic("GetModuleHandle")
 	}
-	manifest.Load()
-	//MustRegisterWindowClass(nguiWindowClass)
-	nguiTransparentWindowClass = _NguiTransparentWindowClass + strconv.Itoa(os.Getpid())
-	MustRegisterTransparentWindowClass(nguiTransparentWindowClass)
 }
 
 type Application struct {
 }
 
-func (this *Application) init() (err error) {
+// 主进程
+func (a *Application) Exec() {
+	manifest.Load()
+	MustRegisterWindowClass(nguiWindowClass)
+	nguiTransparentWindowClass = _NguiTransparentWindowClass + strconv.Itoa(os.Getpid())
+	MustRegisterTransparentWindowClass(nguiTransparentWindowClass)
+
+	cef.ExecuteProcess(unsafe.Pointer(hInstance))
+
+	a.createWindow()
+
+	settings := cef.Settings{}
+	//settings.SingleProcess = 1	// 单进程模式
+	settings.CachePath = manifest.CachePath()      // Set to empty to disable
+	settings.LogSeverity = cef.LOGSEVERITY_DEFAULT // LOGSEVERITY_VERBOSE
+	//settings.LocalesDirPath = releasePath + "/locales"
+	settings.Locale = manifest.Locale() //"zh-CN"
+	settings.BrowserSubprocessPath = manifest.BrowserSubprocessPath()
+	//settings.RemoteDebuggingPort = 7000
+	cef.Initialize(settings)
+
+	cef.RunMessageLoop()
+	cef.Shutdown()
+	os.Exit(0)
+}
+
+// 渲染进程
+func (a *Application) ExecuteProcess() {
+	/*
+	HINSTANCE hInstance = GetModuleHandle(0);
+    CefMainArgs args(hInstance);
+    CefRefPtr<CefApp> app(new TestApp);
+    return CefExecuteProcess(args, app.get(), 0);
+	 */
+	manifest.Load()
+	//MustRegisterWindowClass(nguiWindowClass)
+	nguiTransparentWindowClass = _NguiTransparentWindowClass + strconv.Itoa(os.Getpid())
+	MustRegisterTransparentWindowClass(nguiTransparentWindowClass)
+
 	cef.ExecuteProcess(unsafe.Pointer(hInstance))
 
 	settings := cef.Settings{}
@@ -67,75 +101,23 @@ func (this *Application) init() (err error) {
 	settings.LogSeverity = cef.LOGSEVERITY_DEFAULT // LOGSEVERITY_VERBOSE
 	//settings.LocalesDirPath = releasePath + "/locales"
 	settings.Locale = manifest.Locale() //"zh-CN"
+	settings.BrowserSubprocessPath = manifest.BrowserSubprocessPath()
 	//settings.RemoteDebuggingPort = 7000
 	cef.Initialize(settings)
 
-	return
+	cef.RunMessageLoop()
+	cef.Shutdown()
+	os.Exit(0)
 }
 
-func MustRegisterWindowClass(className string) {
-	hInstance := win.GetModuleHandle(nil)
-	if hInstance == 0 {
-		panic("GetModuleHandle")
-	}
-	hIcon := win.LoadIcon(hInstance, (*uint16)(unsafe.Pointer(uintptr(ICON_MAIN))))
-	//hIcon, _ := NewIconFromResource(hInstance, ICON_MAIN)
-	if hIcon == 0 {
-		panic("LoadIcon")
-	}
-
-	hCursor := win.LoadCursor(0, (*uint16)(unsafe.Pointer(uintptr(win.IDC_ARROW))))
-	if hCursor == 0 {
-		panic("LoadCursor")
-	}
-
-	var wc win.WNDCLASSEX
-	wc.CbSize = uint32(unsafe.Sizeof(wc))
-	wc.LpfnWndProc = wndProc
-	wc.HInstance = hInstance
-	wc.HIcon = hIcon
-	wc.HCursor = hCursor
-	wc.HbrBackground = win.COLOR_WINDOW + 1 //COLOR_BTNFACE
-	wc.LpszClassName = syscall.StringToUTF16Ptr(className)
-
-	if atom := win.RegisterClassEx(&wc); atom == 0 {
-		panic("RegisterClassEx")
-	}
-}
-
-func MustRegisterTransparentWindowClass(className string) {
-	hInstance := win.GetModuleHandle(nil)
-	if hInstance == 0 {
-		panic("GetModuleHandle")
-	}
-	fmt.Printf("MustRegisterTransparentWindowClass hInstance=%v\n", hInstance)
-	//hIcon := win.LoadIcon(hInstance, (*uint16)(unsafe.Pointer(uintptr(win.IDI_APPLICATION))))
-	hIcon, _ := NewIconFromResource(hInstance, ICON_MAIN)
-	if hIcon == 0 {
-		panic("LoadIcon")
-	}
-
-	hCursor := win.LoadCursor(0, (*uint16)(unsafe.Pointer(uintptr(win.IDC_ARROW))))
-	if hCursor == 0 {
-		panic("LoadCursor")
-	}
-
-	var wc win.WNDCLASSEX
-	wc.CbSize = uint32(unsafe.Sizeof(wc))
-	wc.LpfnWndProc = transparentWndProc
-	wc.HInstance = hInstance
-	wc.HIcon = hIcon
-	wc.HCursor = hCursor
-	wc.HbrBackground = win.BS_SOLID//win.BS_SOLID//win.COLOR_WINDOW + 1 //COLOR_BTNFACE
-	wc.LpszClassName = syscall.StringToUTF16Ptr(className)
-
-	if atom := win.RegisterClassEx(&wc); atom == 0 {
-		panic("RegisterClassEx")
-	}
+// subProcess - true: 子进程 false: 主进程
+func NewApplication(subProcess bool) *Application {
+	gApplication = new(Application)
+	return gApplication
 }
 
 // 创建浏览器窗口
-func (this *Application) CreateBrowserWindow(url string, captionless bool) (err error) {
+func (a *Application) CreateBrowserWindow(url string, captionless bool) (err error) {
 	var dwExStyle, dwStyle uint32 = 0, 0
 	var captionlessFlag uintptr = 0
 	fmt.Printf("CreateBrowserWindow url=%v captionless=%v\n", url, captionless)
@@ -248,7 +230,7 @@ func (this *Application) CreateBrowserWindow(url string, captionless bool) (err 
 }
 
 // 创建应用程序主窗口
-func (this *Application) CreateWindow() {
+func (a *Application) createWindow() {
 	url := manifest.FirstPage()
 	if strings.HasPrefix(url, "http://") {
 		//
@@ -260,20 +242,7 @@ func (this *Application) CreateWindow() {
 	}
 	fmt.Printf("CreateWindow url=%s\n", url)
 	captionless := (manifest.Style() == WindowStyleCaptionLess)
-	this.CreateBrowserWindow(url, captionless)
-}
-
-func (e *Application) Exec() {
-	cef.RunMessageLoop()
-	cef.Shutdown()
-	os.Exit(0)
-}
-
-func NewApplication() *Application {
-	gApplication = new(Application)
-	gApplication.init()
-
-	return gApplication
+	a.CreateBrowserWindow(url, captionless)
 }
 
 func WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) (result uintptr) {
@@ -363,4 +332,65 @@ func TransparentWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) (resu
 	}
 	//result = win.DefWindowProc(hwnd, msg, wParam, lParam)
 	return
+}
+
+func MustRegisterWindowClass(className string) {
+	hInstance := win.GetModuleHandle(nil)
+	if hInstance == 0 {
+		panic("GetModuleHandle")
+	}
+	hIcon := win.LoadIcon(hInstance, (*uint16)(unsafe.Pointer(uintptr(ICON_MAIN))))
+	//hIcon, _ := NewIconFromResource(hInstance, ICON_MAIN)
+	if hIcon == 0 {
+		panic("LoadIcon")
+	}
+
+	hCursor := win.LoadCursor(0, (*uint16)(unsafe.Pointer(uintptr(win.IDC_ARROW))))
+	if hCursor == 0 {
+		panic("LoadCursor")
+	}
+
+	var wc win.WNDCLASSEX
+	wc.CbSize = uint32(unsafe.Sizeof(wc))
+	wc.LpfnWndProc = wndProc
+	wc.HInstance = hInstance
+	wc.HIcon = hIcon
+	wc.HCursor = hCursor
+	wc.HbrBackground = win.COLOR_WINDOW + 1 //COLOR_BTNFACE
+	wc.LpszClassName = syscall.StringToUTF16Ptr(className)
+
+	if atom := win.RegisterClassEx(&wc); atom == 0 {
+		panic("RegisterClassEx")
+	}
+}
+
+func MustRegisterTransparentWindowClass(className string) {
+	hInstance := win.GetModuleHandle(nil)
+	if hInstance == 0 {
+		panic("GetModuleHandle")
+	}
+	fmt.Printf("MustRegisterTransparentWindowClass hInstance=%v\n", hInstance)
+	//hIcon := win.LoadIcon(hInstance, (*uint16)(unsafe.Pointer(uintptr(win.IDI_APPLICATION))))
+	hIcon, _ := NewIconFromResource(hInstance, ICON_MAIN)
+	if hIcon == 0 {
+		panic("LoadIcon")
+	}
+
+	hCursor := win.LoadCursor(0, (*uint16)(unsafe.Pointer(uintptr(win.IDC_ARROW))))
+	if hCursor == 0 {
+		panic("LoadCursor")
+	}
+
+	var wc win.WNDCLASSEX
+	wc.CbSize = uint32(unsafe.Sizeof(wc))
+	wc.LpfnWndProc = transparentWndProc
+	wc.HInstance = hInstance
+	wc.HIcon = hIcon
+	wc.HCursor = hCursor
+	wc.HbrBackground = win.BS_SOLID//win.BS_SOLID//win.COLOR_WINDOW + 1 //COLOR_BTNFACE
+	wc.LpszClassName = syscall.StringToUTF16Ptr(className)
+
+	if atom := win.RegisterClassEx(&wc); atom == 0 {
+		panic("RegisterClassEx")
+	}
 }

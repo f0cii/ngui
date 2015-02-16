@@ -1,4 +1,5 @@
 {
+  "browser_subprocess_path": "ngprocess"
   "first_page": "example.html",
   "application_title": "Hello Ngui!",
   "version": "1.0",
