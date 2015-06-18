@@ -4,7 +4,7 @@
   "version": "1.0",
   "browser_subprocess_path": "browser.exe",
   "locale": "zh-CN",
-  "cache_path": "webdata",
+  "cache_path": "webcache",
   "style": 1,
   "form_fixed": true,
   "enable_transparent": false,
