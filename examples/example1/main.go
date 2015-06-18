@@ -9,9 +9,9 @@ import (
 )
 
 func main() {
-	app := ngui.NewApplication()
+	app := ngui.New()
 
-	app.CreateWindow()
+	//app.CreateWindow()
 
 	app.Exec()
 }

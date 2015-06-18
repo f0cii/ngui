@@ -8,16 +8,16 @@ import (
 )
 
 const (
-	manifest_filename  = `manifest.json`
-	first_page         = `first_page`
-	application_title  = `application_title`
-	locale             = `locale`
-	cache_path         = `cache_path`
-	style              = `style`
-	width              = `width`
-	height             = `height`
-	form_fixed         = `form_fixed`
-	enable_transparent = `enable_transparent`
+	manifest_filename       = `manifest.json`
+	first_page              = `first_page`
+	application_title       = `application_title`
+	locale                  = `locale`
+	cache_path              = `cache_path`
+	style                   = `style`
+	width                   = `width`
+	height                  = `height`
+	form_fixed              = `form_fixed`
+	enable_transparent      = `enable_transparent`
 	browser_subprocess_path = `browser_subprocess_path`
 
 	WindowStyleNormal      = 0

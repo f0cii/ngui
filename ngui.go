@@ -15,14 +15,14 @@ import (
 	"strings"
 	"syscall"
 	//"time"
-	"unsafe"
 	"strconv"
+	"unsafe"
 )
 
 const (
 	ICON_MAIN = 100
 
-	SPI_SETDRAGFULLWINDOWS =      0x0025
+	SPI_SETDRAGFULLWINDOWS = 0x0025
 
 	WindowProp_CaptionLess = "_captionless"
 )
@@ -61,9 +61,17 @@ func (a *Application) Exec() {
 	nguiTransparentWindowClass = _NguiTransparentWindowClass + strconv.Itoa(os.Getpid())
 	MustRegisterTransparentWindowClass(nguiTransparentWindowClass)
 
-	cef.ExecuteProcess(unsafe.Pointer(hInstance))
+	exitCode := cef.ExecuteProcess(unsafe.Pointer(hInstance))
+	if exitCode >= 0 {
+		return
+	}
 
-	a.createWindow()
+	cef.OnContextInitialized = func() {
+		a.createWindow()
+	}
+	cef.OnOpenWindow = func(url string) {
+
+	}
 
 	settings := cef.Settings{}
 	//settings.SingleProcess = 1	// 单进程模式
@@ -83,11 +91,11 @@ func (a *Application) Exec() {
 // 渲染进程
 func (a *Application) ExecuteProcess() {
 	/*
-	HINSTANCE hInstance = GetModuleHandle(0);
-    CefMainArgs args(hInstance);
-    CefRefPtr<CefApp> app(new TestApp);
-    return CefExecuteProcess(args, app.get(), 0);
-	 */
+		HINSTANCE hInstance = GetModuleHandle(0);
+	    CefMainArgs args(hInstance);
+	    CefRefPtr<CefApp> app(new TestApp);
+	    return CefExecuteProcess(args, app.get(), 0);
+	*/
 	manifest.Load()
 	//MustRegisterWindowClass(nguiWindowClass)
 	nguiTransparentWindowClass = _NguiTransparentWindowClass + strconv.Itoa(os.Getpid())
@@ -111,7 +119,7 @@ func (a *Application) ExecuteProcess() {
 }
 
 // subProcess - true: 子进程 false: 主进程
-func NewApplication(subProcess bool) *Application {
+func New() *Application {
 	gApplication = new(Application)
 	return gApplication
 }
@@ -130,7 +138,7 @@ func (a *Application) CreateBrowserWindow(url string, captionless bool) (err err
 		//dwStyle = win.WS_POPUP //& ^ (win.WS_CAPTION | win.WS_BORDER)
 
 		dwStyle = win.WS_MINIMIZEBOX | win.WS_MAXIMIZEBOX | win.WS_CAPTION | win.WS_CLIPCHILDREN |
-				win.WS_SYSMENU | win.WS_POPUP
+			win.WS_SYSMENU | win.WS_POPUP
 
 	} else {
 		dwStyle = win.WS_OVERLAPPEDWINDOW
@@ -147,7 +155,7 @@ func (a *Application) CreateBrowserWindow(url string, captionless bool) (err err
 	width = manifest.Width()
 	height = manifest.Height()
 	x = (win.GetSystemMetrics(win.SM_CXSCREEN) - width) / 2
-	y = (win.GetSystemMetrics(win.SM_CYSCREEN) - height) / 2 - 2
+	y = (win.GetSystemMetrics(win.SM_CYSCREEN)-height)/2 - 2
 
 	renderWindow := win.CreateWindowEx(
 		dwExStyle,
@@ -172,9 +180,9 @@ func (a *Application) CreateBrowserWindow(url string, captionless bool) (err err
 
 	if captionless {
 		/*
-		SetWindowLong(hWnd, GWL_STYLE,
-        GetWindowLong(hWnd, GWL_STYLE) & ~(WS_BORDER));
-		 */
+				SetWindowLong(hWnd, GWL_STYLE,
+		        GetWindowLong(hWnd, GWL_STYLE) & ~(WS_BORDER));
+		*/
 
 		// WS_BORDER Creates a window that has a border.创建一个有边界的窗口。
 		// WS_EX_CLIENTEDGE Specifies that a window has a 3D look — that is, a border with a sunken edge.指定窗口具有3D外观，也即是一个下层的边缘。
@@ -215,7 +223,7 @@ func (a *Application) CreateBrowserWindow(url string, captionless bool) (err err
 		//		WS_VISIBLE;
 		cef.WindowResized(unsafe.Pointer(renderWindow))
 
-		win.ShowWindow(renderWindow, win.SW_SHOW)//win.SW_SHOW
+		win.ShowWindow(renderWindow, win.SW_SHOW) //win.SW_SHOW
 		win.UpdateWindow(renderWindow)
 
 		//cef.WindowResized(unsafe.Pointer(renderWindow))
@@ -293,7 +301,7 @@ func TransparentWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) (resu
 		wpCaptionLess := uintptr(win.GetProp(hwnd, WindowProp_CaptionLess))
 		//fmt.Printf("wpCaptionLess=%v\n", wpCaptionLess)
 		if wpCaptionLess == 1 && win.BOOL(wParam) == win.TRUE {
-			var size_param *win.NCCALCSIZE_PARAMS = (*win.NCCALCSIZE_PARAMS)(unsafe.Pointer(lParam));
+			var size_param *win.NCCALCSIZE_PARAMS = (*win.NCCALCSIZE_PARAMS)(unsafe.Pointer(lParam))
 			size_param.Rgrc[2] = size_param.Rgrc[1]
 			size_param.Rgrc[1] = size_param.Rgrc[0]
 			result = 0
@@ -301,22 +309,22 @@ func TransparentWndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) (resu
 			result = win.DefWindowProc(hwnd, msg, wParam, lParam)
 		}
 	//case win.WM_NCHITTEST:
-		//x := win.LOWORD(uint32(lParam))
-		//y := win.HIWORD(uint32(lParam))
-		//s := fmt.Sprintf("WM_NCHITTEST x,y=%v,%v\n", x, y)
+	//x := win.LOWORD(uint32(lParam))
+	//y := win.HIWORD(uint32(lParam))
+	//s := fmt.Sprintf("WM_NCHITTEST x,y=%v,%v\n", x, y)
 
-		//result = win.DefWindowProc(hwnd, msg, wParam, lParam)
+	//result = win.DefWindowProc(hwnd, msg, wParam, lParam)
 	case win.WM_MOUSEMOVE:
 		//fmt.Printf("WM_MOUSEMOVE\n")
 		if isDrag {
 			var pe win.POINT
-			win.GetCursorPos(&pe); // The new position for cursor pointer
+			win.GetCursorPos(&pe) // The new position for cursor pointer
 
 			left := rcWindow.Left + (pe.X - dragPoint.X) // The horizontal position of the new window
-			top := rcWindow.Top + (pe.Y - dragPoint.Y) // The vertical position of the new windows
+			top := rcWindow.Top + (pe.Y - dragPoint.Y)   // The vertical position of the new windows
 
 			//win.MoveWindow(hwnd,reWindow.Left,reWindow.Top,reWindow.Right,reWindow.Bottom,true);// Moving window
-			win.SetWindowPos(hwnd, 0, left, top, 0, 0, win.SWP_NOSIZE | win.SWP_NOZORDER)
+			win.SetWindowPos(hwnd, 0, left, top, 0, 0, win.SWP_NOSIZE|win.SWP_NOZORDER)
 		}
 	case win.WM_SIZE:
 		// 最小化时不能调整Cef窗体，否则恢复时界面一片空白
@@ -387,7 +395,7 @@ func MustRegisterTransparentWindowClass(className string) {
 	wc.HInstance = hInstance
 	wc.HIcon = hIcon
 	wc.HCursor = hCursor
-	wc.HbrBackground = win.BS_SOLID//win.BS_SOLID//win.COLOR_WINDOW + 1 //COLOR_BTNFACE
+	wc.HbrBackground = win.BS_SOLID //win.BS_SOLID//win.COLOR_WINDOW + 1 //COLOR_BTNFACE
 	wc.LpszClassName = syscall.StringToUTF16Ptr(className)
 
 	if atom := win.RegisterClassEx(&wc); atom == 0 {

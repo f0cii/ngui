@@ -1,3 +1,7 @@
+cd browser
+go build -o ../Release/browser.exe
+cd ..
+
 @if exist "main-res.syso" (
     @del "main-res.syso"
 )

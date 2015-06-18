@@ -2,11 +2,12 @@
   "first_page": "example.html",
   "application_title": "Hello Ngui!",
   "version": "1.0",
+  "browser_subprocess_path": "browser.exe",
   "locale": "zh-CN",
-  "cache_path": "data",
+  "cache_path": "webdata",
   "style": 1,
-  "width": 1020,
-  "height": 760,
   "form_fixed": true,
-  "enable_transparent": false
+  "enable_transparent": false,
+  "width": 1020,
+  "height": 760
 }
