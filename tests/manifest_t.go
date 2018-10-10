@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/nvsoft/ngui"
+
+	"github.com/sumorf/ngui"
 )
 
 func main() {

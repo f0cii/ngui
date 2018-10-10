@@ -2,7 +2,6 @@ package ngui
 
 import (
 	"encoding/json"
-	//"fmt"
 	"io/ioutil"
 	"path"
 )

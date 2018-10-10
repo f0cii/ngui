@@ -1,5 +1,5 @@
-go get -u github.com/nvsoft/cef
-go get -u github.com/nvsoft/win
-go get -u github.com/nvsoft/ngui
+go get -u github.com/sumorf/cef
+go get -u github.com/sumorf/win
+go get -u github.com/sumorf/ngui
 
 pause

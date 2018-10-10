@@ -5,7 +5,7 @@
 package main
 
 import (
-	"github.com/nvsoft/ngui"
+	"github.com/sumorf/ngui"
 )
 
 func main() {

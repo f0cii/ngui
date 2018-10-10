@@ -3,12 +3,13 @@ package ngui
 import (
 	"errors"
 	"fmt"
-	"github.com/nvsoft/win"
 	"path/filepath"
 	"strings"
 	"syscall"
 	"unicode/utf16"
 	"unsafe"
+
+	"github.com/sumorf/win"
 )
 
 var (
