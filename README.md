@@ -11,8 +11,8 @@ How to build on Windows platform (Win7 32/64-bit).
    Copy Release/* to cef2go/Release
    Copy Resources/* to cef2go/Release
 4. install dependencies
-   * go get github.com/nvsoft/cef
-   * go get github.com/nvsoft/win
+   * go get github.com/sumorf/cef
+   * go get github.com/sumorf/win
 5. Run [build.bat] in the directory
 6. Run ngui.exe in the "Release" directory
 7. Test By Xulei on 10-th, Nov. Windows 7, x86, working ok.
